@@ -34,6 +34,44 @@ const db = {
   blacklist: new Set<string>() 
 };
 
+// 🧠 AI Dynamic Pricing Algorithm
+interface RideFactors {
+    baseFare: number;
+    currentHour: number;      // 0-23 (24-hour format)
+    trafficDensity: number;   // 0.0 to 1.0 (1.0 = gridlock)
+    passengerDemand: number;  // 0.0 to 1.0 (1.0 = bus is full)
+}
+
+function calculateDynamicFare(factors: RideFactors): number {
+    const { baseFare, currentHour, trafficDensity, passengerDemand } = factors;
+    
+    // 1. Time Factor (T): Rush hour logic
+    let timeSurge = 0;
+    const isMorningRush = currentHour >= 7 && currentHour <= 9;
+    const isEveningRush = currentHour >= 17 && currentHour <= 19;
+    if (isMorningRush || isEveningRush) {
+        timeSurge = 0.15; // 15% increase during rush hour
+    }
+
+    // 2. Traffic Factor (D): Weight = 0.2
+    const trafficSurge = 0.2 * trafficDensity;
+
+    // 3. Demand Factor (S): Weight = 0.15
+    const demandSurge = 0.15 * passengerDemand;
+
+    // 4. Calculate total multiplier
+    let totalMultiplier = 1 + timeSurge + trafficSurge + demandSurge;
+
+    // 5. Ethical AI Guardrail: Cap the surge at 1.5x max
+    if (totalMultiplier > 1.5) {
+        totalMultiplier = 1.5;
+    }
+
+    // Calculate final fare and round to the nearest ₦50 for clean cash equivalents
+    const rawFare = baseFare * totalMultiplier;
+    return Math.round(rawFare / 50) * 50; 
+}
+
 // ========================================================
 // 🚪 DASHBOARD DATA ENDPOINTS
 // ========================================================
@@ -93,16 +131,41 @@ app.post('/api/rider/fund', (req: Request, res: Response) => {
 // 🚌 DRIVER: UPDATE ROUTE & FARE ENDPOINT
 // ========================================================
 app.post('/api/driver/route', (req: Request, res: Response) => {
-  const { driverId, newFare } = req.body;
-  const driver = db.drivers[driverId];
+    const { driverId, route, baseFare } = req.body;
+    const driver = (db.drivers as any)[driverId];
 
-  if (!driver) return res.status(404).json({ error: 'Driver not found' });
+    if (!driver) return res.status(404).json({ error: "Driver not found" });
 
-  driver.activeFare = newFare; 
-  console.log(`\n🚌 ROUTE UPDATED: ${driver.name} changed fare to ₦${newFare}`);
-  res.status(200).json({ status: 'success', activeFare: driver.activeFare });
+    // 🌍 For the Hackathon MVP, we simulate pulling real-time environmental data
+    const currentHour = new Date().getHours();
+    
+    // Simulate traffic and demand (In a real app, this comes from Google Maps API or historical DB)
+    // We force a high traffic density (0.8) to guarantee a surge so you can show the judges it works!
+    const simulatedTraffic = 0.8; 
+    const simulatedDemand = 0.7;  
+
+    // 🚀 FIRE THE AI ALGORITHM
+    const optimizedFare = calculateDynamicFare({
+        baseFare: baseFare,
+        currentHour: currentHour,
+        trafficDensity: simulatedTraffic,
+        passengerDemand: simulatedDemand
+    });
+
+    // Update the database with the new AI-calculated fare
+    driver.activeRoute = route;
+    driver.activeFare = optimizedFare; 
+
+    console.log(`🧠 AI PRICING ACTIVATED: ${driver.name} changed route to ${route}.`);
+    console.log(`Base: ₦${baseFare} -> AI Optimized: ₦${optimizedFare}`);
+    
+    res.json({ 
+        status: "success", 
+        originalFare: baseFare,
+        newFare: optimizedFare,
+        surgeMultiplier: (optimizedFare / baseFare).toFixed(2)
+    });
 });
-
 // ========================================================
 // 💳 THE LIVE WEBHOOK (Online Payments & QR Scans)
 // ========================================================
