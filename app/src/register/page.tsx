@@ -62,7 +62,7 @@ export default function RegisterDashboard() {
     const proceedToDashboard = () => {
         if (!successProfile) return;
         // Dynamically route the user to their specific workspace
-        router.push(successProfile.role === 'rider' ? '/src' : `/src/${successProfile.role}`);
+        router.push(`/src/${successProfile.role}`);
     };
 
     // ==========================================
