@@ -311,20 +311,29 @@ export default function DriverDashboard() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-gray-900 border border-gray-800 w-full max-w-xs rounded-3xl p-6 space-y-5 animate-in scale-in duration-200">
             {withdrawStep === 'confirm' && (
-              <>
-                <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-green-400 font-mono">Ledger Settlement</h3>
-                  <button onClick={closeModals} className="p-1.5 bg-gray-800 rounded-full hover:bg-gray-700 transition"><X size={12}/></button>
-                </div>
-                <div className="text-center space-y-2 py-2">
-                  <p className="text-[10px] text-gray-400 font-mono uppercase tracking-wider">Available Payout</p>
-                  <h1 className="text-3xl font-black text-white">₦{profile.walletBalance.toLocaleString()}</h1>
-                </div>
-                <button onClick={executeWithdrawal} className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-xl text-xs font-mono transition shadow-lg shadow-green-500/20">
-                  Process Payout to Bank
-                </button>
-              </>
-            )}
+  <>
+    <div className="flex justify-between items-center border-b border-gray-800 pb-3">
+      <h3 className="text-xs font-bold uppercase tracking-wider text-green-400 font-mono">Ledger Settlement</h3>
+      <button onClick={closeModals} className="p-1.5 bg-gray-800 rounded-full hover:bg-gray-700 transition"><X size={12}/></button>
+    </div>
+    
+    <div className="text-center space-y-2 py-4">
+      <p className="text-[10px] text-gray-400 font-mono uppercase tracking-wider">Available Payout</p>
+      <h1 className="text-4xl font-black text-white">₦{profile.walletBalance.toLocaleString()}</h1>
+    </div>
+
+    {/* 👇 NEW: Static Visual Bank Link for Demo */}
+    <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 text-left mb-4 shadow-inner">
+       <p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider mb-1">Linked Commercial Account</p>
+       <p className="text-sm font-black text-gray-200 tracking-widest font-mono">0123456789</p>
+       <p className="text-[10px] text-gray-400 font-bold mt-0.5">Guaranty Trust Bank - {profile.fullName}</p>
+    </div>
+
+    <button onClick={executeWithdrawal} className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-xs font-mono transition shadow-lg shadow-green-500/20">
+      Process Payout to Bank
+    </button>
+  </>
+)}
             
             {withdrawStep === 'processing' && (
               <div className="text-center py-8 font-mono text-xs text-gray-400 space-y-4">
