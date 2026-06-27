@@ -77,6 +77,8 @@ export default function RiderDashboard() {
   const [targetFriendId, setTargetFriendId] = useState('');
   const [friendName, setFriendName] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
+  const [topUpAmount, setTopUpAmount] = useState('');
+  const [isToppingUp, setIsToppingUp] = useState(false);
 
   // ==========================================
   // 🔐 LAYER 3: AUTHENTICATION GUARD
@@ -221,6 +223,27 @@ export default function RiderDashboard() {
       }
     } catch {
       setTransferStep('confirm');
+    }
+  };
+
+  const executeSimulatedTopUp = async () => {
+    if (!topUpAmount) return;
+    setIsToppingUp(true);
+    try {
+      const res = await fetch('http://127.0.0.1:5000/api/v1/payments/topup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, amount: Number(topUpAmount) })
+      });
+      if (res.ok) {
+        syncEcosystemTelemetry(); // Pulls the new balance and the new history row instantly!
+        resetModals();
+      }
+    } catch (err) {
+      console.error("Simulation failed");
+    } finally {
+      setIsToppingUp(false);
+      setTopUpAmount('');
     }
   };
 
@@ -515,7 +538,7 @@ export default function RiderDashboard() {
        </div>
       )}
 
-      {/* 3. TOP-UP MODAL */}
+      {/* 3. TOP-UP MODAL (WITH SIMULATED LEDGER PUSH) */}
       {activeModal === 'topup' && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-gray-900 border border-gray-800 w-full max-w-xs rounded-3xl p-6 space-y-5 animate-in scale-in duration-200">
@@ -523,18 +546,34 @@ export default function RiderDashboard() {
               <h3 className="text-xs font-bold uppercase tracking-wider text-green-400 font-mono">Funding Account</h3>
               <button onClick={resetModals} className="p-1.5 bg-gray-800 rounded-full hover:bg-gray-700 transition"><X size={12}/></button>
             </div>
+            
             <div className="space-y-4 font-mono text-xs">
-              <p className="text-gray-400 leading-relaxed text-[10px]">Transfer from any commercial banking app to credit your OrderWatch wallet instantly.</p>
               <div className="bg-gray-950 p-3.5 rounded-xl border border-gray-800 shadow-inner">
                 <p className="text-gray-500 uppercase text-[9px] font-bold mb-0.5">Account Number</p>
                 <p className="font-black text-white tracking-widest text-lg">{profile.virtualAccountNumber}</p>
+                <p className="font-bold text-gray-400 mt-1">{profile.virtualBankName}</p>
               </div>
-              <div className="bg-gray-950 p-3.5 rounded-xl border border-gray-800 shadow-inner">
-                <p className="text-gray-500 uppercase text-[9px] font-bold mb-0.5">Bank Name</p>
-                <p className="font-bold text-gray-300">{profile.virtualBankName}</p>
+
+              {/* DEMO SIMULATION INPUT */}
+              <div className="pt-2">
+                <label className="block text-[10px] font-bold font-mono uppercase text-gray-500 mb-2">Simulate Bank Deposit (₦)</label>
+                <input 
+                  type="number" 
+                  value={topUpAmount} 
+                  onChange={(e) => setTopUpAmount(e.target.value)} 
+                  placeholder="e.g. 5000" 
+                  className="w-full p-4 bg-gray-950 rounded-xl border border-gray-800 font-mono text-xl font-black text-center text-white outline-none focus:border-green-500 transition" 
+                />
               </div>
             </div>
-            <button onClick={resetModals} className="w-full bg-gray-800 hover:bg-gray-700 py-3 rounded-xl text-xs font-bold transition">Close</button>
+
+            <button 
+              onClick={executeSimulatedTopUp} 
+              disabled={isToppingUp || !topUpAmount}
+              className="w-full bg-green-500 hover:bg-green-600 text-white py-3.5 rounded-xl text-xs font-bold transition disabled:opacity-50 font-mono"
+            >
+              {isToppingUp ? 'Processing Push...' : 'Simulate Deposit Transfer'}
+            </button>
           </div>
         </div>
       )}
