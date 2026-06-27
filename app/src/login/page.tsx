@@ -24,7 +24,7 @@ export default function LoginDashboard() {
 
             if (res.ok && data.status === 'success') {
                 localStorage.setItem(`ow_active_${data.profile.role}`, data.profile.id);
-                router.push(data.profile.role === 'rider' ? '/src' : `/src/${data.profile.role}`);
+                router.push(`/src/${data.profile.role}`);
             } else {
                 alert(data.message || 'Login failed.');
             }
