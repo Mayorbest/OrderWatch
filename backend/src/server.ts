@@ -341,7 +341,5 @@ app.patch('/api/v1/notifications/:userId/clear', (req: Request, res: Response) =
 });
 
 app.listen(PORT, () => {
-    console.log(`=================================================`);
     console.log(`🚀 ORDERWATCH CORE INFRASTRUCTURE ACTIVE ON PORT: ${PORT}`);
-    console.log(`=================================================`);
 });
