@@ -9,5 +9,9 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    // ... keep your other existing settings
+  }
 }
