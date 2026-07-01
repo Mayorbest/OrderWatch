@@ -69,14 +69,14 @@ export default function DriverDashboard() {
     if (!driverId) return;
 
     try {
-      const ntfResponse = await fetch(`http://127.0.0.1:5000/api/v1/notifications/${driverId}`, { cache: 'no-store' });
+      const ntfResponse = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/notifications/${driverId}`, { cache: 'no-store' });
       const ntfData = await ntfResponse.json();
       if (ntfData.status === 'success') {
         setNotifications(ntfData.notifications);
         setUnreadCount(ntfData.unreadCount);
       }
 
-      const userResponse = await fetch(`http://127.0.0.1:5000/api/v1/users/verify/${driverId}`, { cache: 'no-store' });
+      const userResponse = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/users/verify/${driverId}`, { cache: 'no-store' });
       const userData = await userResponse.json();
       if (userData.status === 'success' && userData.profile) {
         setProfile({
@@ -92,7 +92,7 @@ export default function DriverDashboard() {
         });
       }
 
-      const txResponse = await fetch(`http://127.0.0.1:5000/api/v1/transactions/${driverId}`, { cache: 'no-store' });
+      const txResponse = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/transactions/${driverId}`, { cache: 'no-store' });
       const txData = await txResponse.json();
       if (txData.status === 'success') {
         setTxHistory(txData.transactions);
@@ -120,7 +120,7 @@ export default function DriverDashboard() {
     setIsUpdatingRoute(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/driver/route-update', {
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/driver/route-update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ driverId, selectedRoute: route })

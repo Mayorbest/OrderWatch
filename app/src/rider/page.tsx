@@ -102,14 +102,14 @@ export default function RiderDashboard() {
     if (!userId) return;
 
     try {
-      const resNtf = await fetch(`http://127.0.0.1:5000/api/v1/notifications/${userId}`, { cache: 'no-store' });
+      const resNtf = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/notifications/${userId}`, { cache: 'no-store' });
       const dataNtf = await resNtf.json();
       if (dataNtf.status === 'success') {
         setNotifications(dataNtf.notifications);
         setUnreadCount(dataNtf.unreadCount);
       }
 
-      const resUser = await fetch(`http://127.0.0.1:5000/api/v1/users/verify/${userId}`, { cache: 'no-store' });
+      const resUser = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/users/verify/${userId}`, { cache: 'no-store' });
       const dataUser = await resUser.json();
       if (dataUser.status === 'success' && dataUser.profile) {
         setProfile({
@@ -123,7 +123,7 @@ export default function RiderDashboard() {
         });
       }
 
-      const resTx = await fetch(`http://127.0.0.1:5000/api/v1/transactions/${userId}`, { cache: 'no-store' });
+      const resTx = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/transactions/${userId}`, { cache: 'no-store' });
       const dataTx = await resTx.json();
       if (dataTx.status === 'success') {
         setTxHistory(dataTx.transactions);
@@ -151,7 +151,7 @@ export default function RiderDashboard() {
   const fetchActiveFleetRadar = async () => {
     setTransitStep('processing');
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/drivers/active', { cache: 'no-store' });
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/drivers/active', { cache: 'no-store' });
       const data = await res.json();
       if (data.status === 'success') {
         setActiveDrivers(data.drivers);
@@ -169,7 +169,7 @@ export default function RiderDashboard() {
     if (!selectedDriver) return;
     setTransitStep('processing');
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/payments/p2p-transfer', {
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/payments/p2p-transfer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // ✅ SENIOR DEV FIX: No hardcoded targets. Strict dynamic JSON payload.
@@ -193,7 +193,7 @@ export default function RiderDashboard() {
   const handleP2PLookup = async () => {
     setTransferStep('processing');
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/v1/users/verify/${targetFriendId}`, { cache: 'no-store' });
+      const res = await fetch(`https://orderwatch-cg01.onrender.com/api/v1/users/verify/${targetFriendId}`, { cache: 'no-store' });
       const data = await res.json();
       if (data.status === 'success') {
         setFriendName(data.fullName);
@@ -210,7 +210,7 @@ export default function RiderDashboard() {
   const handleP2PExecution = async () => {
     setTransferStep('processing');
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/payments/p2p-transfer', {
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/payments/p2p-transfer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ senderId: userId, receiverId: targetFriendId, amount: Number(transferAmount) })
@@ -230,7 +230,7 @@ export default function RiderDashboard() {
     if (!topUpAmount) return;
     setIsToppingUp(true);
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/payments/topup', {
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/payments/topup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, amount: Number(topUpAmount) })

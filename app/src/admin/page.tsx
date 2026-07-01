@@ -47,7 +47,7 @@ export default function GovernmentCommandCenter() {
   // 📡 RESOLVED FETCH FUNCTION
   const fetchLiveStateAnalytics = useCallback(async () => {
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/admin/analytics', { cache: 'no-store' });
+      const res = await fetch('https://orderwatch-cg01.onrender.com/api/v1/admin/analytics', { cache: 'no-store' });
       if (!res.ok) throw new Error("Network latency anomaly detected.");
       
       const responsePayload = await res.json();
