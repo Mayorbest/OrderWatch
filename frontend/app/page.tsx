@@ -41,19 +41,19 @@ export default function LandingPage() {
 
         {/* Action Portals for Judges */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mt-4">
-          <Link href="/rider" className="group flex flex-col items-center p-6 bg-white border border-gray-200 rounded-2xl hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-100 transition-all cursor-pointer">
+          <Link href="src/register" className="group flex flex-col items-center p-6 bg-white border border-gray-200 rounded-2xl hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-100 transition-all cursor-pointer">
             <CreditCard className="w-8 h-8 text-indigo-500 mb-4 group-hover:scale-110 transition-transform" />
             <h3 className="font-bold text-gray-900">Rider Portal</h3>
             <p className="text-sm text-gray-500 mt-2 text-center">Fund your Nomba transit wallet and view tap history.</p>
           </Link>
           
-          <Link href="/driver" className="group flex flex-col items-center p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-lg hover:shadow-blue-100 transition-all cursor-pointer">
+          <Link href="src/driver" className="group flex flex-col items-center p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-lg hover:shadow-blue-100 transition-all cursor-pointer">
             <Activity className="w-8 h-8 text-blue-500 mb-4 group-hover:scale-110 transition-transform" />
             <h3 className="font-bold text-gray-900">Driver Portal</h3>
             <p className="text-sm text-gray-500 mt-2 text-center">Track live revenue and view AI surge multiplier zones.</p>
           </Link>
           
-          <Link href="/admin" className="group flex flex-col items-center p-6 bg-gray-900 border border-gray-800 rounded-2xl hover:bg-black hover:shadow-xl transition-all cursor-pointer">
+          <Link href="src/admin" className="group flex flex-col items-center p-6 bg-gray-900 border border-gray-800 rounded-2xl hover:bg-black hover:shadow-xl transition-all cursor-pointer">
             <ShieldCheck className="w-8 h-8 text-green-400 mb-4 group-hover:scale-110 transition-transform" />
             <h3 className="font-bold text-white">Gov Audit Terminal</h3>
             <p className="text-sm text-gray-400 mt-2 text-center">Live hardware sync for automated tax revenue tracking.</p>
