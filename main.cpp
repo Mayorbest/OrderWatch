@@ -29,7 +29,7 @@ struct RiderCard {
 };
  
 RiderCard knownRiders[] = {
-  { "AA:BB:CC:DD", "ow_rider_000001" }, // <-- REPLACE with real UID + real riderId
+  { "AA:BB:CC:DD", "ow_rider_000001" }, // <-- REPLACE with real UID(this will be gotten from esp serial monitor) + real riderId (this can be gotten from the rider's dashboard )
   { "11:22:33:44", "ow_rider_000002" }, // <-- REPLACE with real UID + real riderId
 };
 const int NUM_KNOWN_RIDERS = 2;
