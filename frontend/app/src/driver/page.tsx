@@ -42,9 +42,7 @@ interface TransactionItem {
 // ==========================================
 export default function DriverDashboard() {
   const [driverId, setDriverId] = useState<string>('');
-  const [isHydrating, setIsHydrating] = useState<boolean>(true);
-  const [driverData, setDriverData] = useState(null);
-  
+  const [isHydrating, setIsHydrating] = useState<boolean>(true); 
   const [profile, setProfile] = useState<OrderWatchDriverProfile | null>(null);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
@@ -107,16 +105,6 @@ export default function DriverDashboard() {
 
   useEffect(() => {
     if (!driverId) return;
-    const syncDriverTelemetry = async () => {
-        try {
-            // NOTICE THE DIFFERENT URL!
-            const res = await fetch("https://orderwatch-cg01.onrender.com/api/v1/driver/recent-taps");
-            const data = await res.json();
-            setDriverData(data); 
-        } catch (error) {
-            console.error("Failed to sync:", error);
-        }
-    };
     syncDriverTelemetry();
     const heartbeat = setInterval(syncDriverTelemetry, 3500);
     return () => clearInterval(heartbeat);

@@ -63,17 +63,6 @@ export default function GovernmentCommandCenter() {
   }, []);
 
   useEffect(() => {
-    const fetchLiveStateAnalytics = async () => {
-        try {
-            // Asks Render: "Give me the latest stats"
-            const res = await fetch("https://orderwatch-cg01.onrender.com/api/v1/admin/analytics");
-            const fetchedData = await res.json();
-            setData(fetchedData); // Updates the screen
-        } catch (error) {
-            console.error("Failed to fetch live data:", error);
-        }
-    };
-    
     fetchLiveStateAnalytics();
     const coreHeartbeat = setInterval(fetchLiveStateAnalytics, 3500); 
     return () => clearInterval(coreHeartbeat);
