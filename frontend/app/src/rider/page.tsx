@@ -63,6 +63,7 @@ export default function RiderDashboard() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [txHistory, setTxHistory] = useState<TransactionItem[]>([]);
+  const [riderData, setRiderData] = useState(null);
 
   // 3. Radar State (Dynamic Drivers)
   const [activeDrivers, setActiveDrivers] = useState<ActiveDriverNode[]>([]);
@@ -137,6 +138,18 @@ export default function RiderDashboard() {
 
   useEffect(() => {
     if (!userId) return;
+    const syncEcosystemTelemetry = async () => {
+        try {
+            // ⚠️ Ensure this URL points to your actual endpoint for Rider data
+            const res = await fetch("https://orderwatch-cg01.onrender.com/api/v1/rider/wallet-balance");
+            const data = await res.json();
+            
+            // This updates the screen with the new data
+            setRiderData(data); 
+        } catch (error) {
+            console.error("Telemetry sync failed:", error);
+        }
+    };
     syncEcosystemTelemetry(); 
     const heartbeat = setInterval(syncEcosystemTelemetry, 3500); 
     return () => clearInterval(heartbeat);
